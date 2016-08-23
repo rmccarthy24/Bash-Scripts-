@@ -1,0 +1,23 @@
+#!/bin/bash
+
+myTimeStamp=`date +%Y%m%d-%H%M`
+myLogFile=/test/server_$myTimeStamp.log
+
+results='find *.log -mtime +7'
+
+if [[$resultes]]; then
+	echo "The following log files where found."
+	display-results "$results"
+	echo "Would you like to archive then remove them?"
+	read yorn
+	if [ "$yorn" == "y" ]; then
+		echo"Archiving and moving to FSR"
+	cd /test/
+	find *.log -mtime +7 -exec tar -czvf server_$myTimeStamp.log.tar.gz /mnt/fs01/
+	find *.log -mtime +7 -exec rm {} \;
+	else 
+		echo "No action taken"
+
+	fi
+else
+	echo "No files found older than 7 days"
