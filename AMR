@@ -1,23 +1,27 @@
 #!/bin/bash
+echo "Checking for logs older than 7 days."
 
-myTimeStamp=`date +%Y%m%d-%H%M`
-myLogFile=/test/server_$myTimeStamp.log
+myTimeStamp='date +%Y%m%d`'
 
-results='find *.log -mtime +7'
+results=`find *.log -mtime +7`
 
-if [[$resultes]]; then
-	echo "The following log files where found."
-	display-results "$results"
-	echo "Would you like to archive then remove them?"
-	read yorn
-	if [ "$yorn" == "y" ]; then
-		echo"Archiving and moving to FSR"
-	cd /test/
-	find *.log -mtime +7 -exec tar -czvf server_$myTimeStamp.log.tar.gz /mnt/fs01/
-	find *.log -mtime +7 -exec rm {} \;
-	else 
-		echo "No action taken"
+function display-results {
+         echo $results;
+}
 
-	fi
+if [[ $results ]]; then
+        echo "The following log files where found."
+        display-results "$results"
+        echo "Would you like to archive then remove them?"
+        read yorn
+        if [ "$yorn" == "y" ]; then
+                echo"Archiving and moving to FSR"
+        find . ./*.log -mtime +7 & -exec  tar -czvf $myTimeStamp.log.tar.gz /mnt/fs01/
+        find . ./*.log -mtime +7 -exec rm {} \;
+        else
+                echo "No action taken"
+
+        fi
 else
-	echo "No files found older than 7 days"
+        echo "No files found older than 7 days"
+fi
